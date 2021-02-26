@@ -14,11 +14,26 @@ defmodule AhaboardWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/auth", AhaboardWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
+    delete "/logout", AuthController, :delete
+  end
+
   scope "/", AhaboardWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    get "/", PageController, :index
   end
+
+  # scope "/", AhaboardWeb do
+  #   pipe_through :browser
+
+  #   live "/", PageLive, :index
+  # end
 
   # Other scopes may use custom stacks.
   # scope "/api", AhaboardWeb do

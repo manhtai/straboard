@@ -1,0 +1,18 @@
+<section class="phx-hero">
+  <h1>Welcome to Ahaboard!</h1>
+  <p>
+    Beautiful leaderboards for teams to compete!
+  </p>
+  <%= if @current_user do %>
+    <h2>Welcome, <%= @current_user.name %>!</h2>
+    <div>
+      <img src="<%= @current_user.avatar %>" />
+    </div>
+    <%= link "Logout", to: Routes.auth_path(@conn, :delete), method: "delete", class: "button" %>
+    <br>
+  <% else %>
+    <a class="button" href="<%= Routes.auth_path(@conn, :request, "strava") %>">
+      Continue with Strava
+    </a>
+  <% end %>
+</section>

@@ -19,7 +19,7 @@ defmodule Ahaboard.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Ahaboard.Application, []},
+      mod: {Ahaboard.Application, [:ueberauth_strava]},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -46,7 +46,12 @@ defmodule Ahaboard.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      # Lint
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      # Auth
+      {:ueberauth, "~> 0.6"},
+      {:oauth2, "~> 2.0", override: true}
     ]
   end
 
