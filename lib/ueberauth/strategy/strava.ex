@@ -3,7 +3,7 @@ defmodule Ueberauth.Strategy.Strava do
   Strava Strategy for Überauth.
   """
 
-  use Ueberauth.Strategy, default_scope: "public"
+  use Ueberauth.Strategy, default_scope: "read"
 
   alias Ueberauth.Auth.Info
   alias Ueberauth.Auth.Credentials
@@ -36,13 +36,14 @@ defmodule Ueberauth.Strategy.Strava do
     try do
       client = Ueberauth.Strategy.Strava.OAuth.get_token!([code: code], opts)
       token = client.token
+      conn = put_private(conn, :strava_token, token)
 
-      if token.access_token == nil do
-        err = token.other_params["error"]
-        desc = token.other_params["error_description"]
-        set_errors!(conn, [error(err, desc)])
-      else
-        fetch_athlete(conn, token)
+      case token.other_params do
+        %{"athlete" => athlete} ->
+          put_private(conn, :strava_athlete, athlete)
+
+        _ ->
+          set_errors!(conn, [error("OAuth2", "Can't get athlete data")])
       end
     rescue
       OAuth2.Error ->
@@ -99,7 +100,8 @@ defmodule Ueberauth.Strategy.Strava do
       first_name: athlete["firstname"],
       last_name: athlete["lastname"],
       email: athlete["email"],
-      image: athlete["profile"]
+      image: athlete["profile"],
+      name: athlete["username"]
     }
   end
 
@@ -114,24 +116,6 @@ defmodule Ueberauth.Strategy.Strava do
         athlete: conn.private.strava_athlete
       }
     }
-  end
-
-  defp fetch_athlete(conn, token) do
-    conn = put_private(conn, :strava_token, token)
-    path = "/api/v3/athlete"
-
-    case Ueberauth.Strategy.Strava.OAuth.get(token, path) do
-      {:error, %OAuth2.Response{status_code: 401, body: body}} ->
-        IO.puts("Fail to authenticate: #{body}")
-        set_errors!(conn, [error("token", "unauthorized")])
-
-      {:ok, %OAuth2.Response{status_code: status_code, body: athlete}}
-      when status_code in 200..399 ->
-        put_private(conn, :strava_athlete, athlete)
-
-      {:error, %OAuth2.Error{reason: reason}} ->
-        set_errors!(conn, [error("OAuth2", reason)])
-    end
   end
 
   defp option(conn, key) do

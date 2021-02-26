@@ -33,6 +33,7 @@ defmodule Ueberauth.Strategy.Strava.OAuth do
       |> Keyword.merge(opts)
 
     OAuth2.Client.new(opts)
+      |> OAuth2.Client.put_serializer("application/json", Ueberauth.json_library())
   end
 
   @doc """
