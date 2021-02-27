@@ -43,7 +43,7 @@ defmodule Ahaboard.Events.Team do
     |> cast(attrs, [
       :member_count,
       :activity_count,
-      :total_distance,
+      :total_distance
     ])
   end
 end

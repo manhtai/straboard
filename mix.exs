@@ -48,11 +48,15 @@ defmodule Ahaboard.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6"},
+      # Strava SDK
+      {:strava, "~> 1.0"},
       # Lint
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       # Auth
       {:ueberauth, "~> 0.6"},
-      {:oauth2, "~> 2.0", override: true}
+      {:oauth2, "~> 2.0", override: true},
+      # Cron
+      {:oban, "~> 2.5"}
     ]
   end
 

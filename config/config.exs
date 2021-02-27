@@ -52,6 +52,18 @@ config :ueberauth, Ueberauth.Strategy.Strava.OAuth,
   client_id: System.get_env("STRAVA_CLIENT_ID"),
   client_secret: System.get_env("STRAVA_CLIENT_SECRET")
 
+config :ahaboard, Oban,
+  repo: Ahaboard.Repo,
+  plugins: [
+    Oban.Plugins.Pruner,
+    {Oban.Plugins.Cron,
+     crontab: [
+       {"0 * * * *", Ahaboard.StravaHourlySync}
+       # {"0 0 * * *", Ahaboard.StravaDailySync},
+     ]}
+  ],
+  queues: [default: 10, pro: 50]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

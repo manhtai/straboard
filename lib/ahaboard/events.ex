@@ -35,12 +35,12 @@ defmodule Ahaboard.Events do
 
   @spec get_event!(binary(), integer) :: Event.t() | nil
   def get_event!(id, user_id) do
-    Event |> Repo.get_by!([id: id, user_id: user_id])
+    Event |> Repo.get_by!(id: id, user_id: user_id)
   end
 
   @spec get_event_by_code(binary()) :: Event.t() | nil
   def get_event_by_code(code) do
-    Event |> Repo.get_by([code: code])
+    Event |> Repo.get_by(code: code)
   end
 
   @spec create_event(map()) :: {:ok, Event.t()} | {:error, Ecto.Changeset.t()}
@@ -51,7 +51,7 @@ defmodule Ahaboard.Events do
     |> Repo.insert()
   end
 
-  @spec update_event(Event.t, map()) :: {:ok, Event.t()} | {:error, Ecto.Changeset.t()}
+  @spec update_event(Event.t(), map()) :: {:ok, Event.t()} | {:error, Ecto.Changeset.t()}
   def update_event(%Event{} = event, attrs) do
     event
     |> Event.changeset(attrs)
@@ -61,7 +61,9 @@ defmodule Ahaboard.Events do
   @spec get_event_user(Event.t(), binary()) :: nil | EventTeamUser.t()
   def get_event_user(%Event{id: id} = _event, user_id) do
     case user_id do
-      nil -> nil
+      nil ->
+        nil
+
       _ ->
         EventTeamUser
         |> where(event_id: ^id, user_id: ^user_id)
@@ -69,15 +71,17 @@ defmodule Ahaboard.Events do
     end
   end
 
-  @spec join_event(Event.t(), Team.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
+  @spec join_event(Event.t(), Team.t(), binary()) ::
+          {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
   def join_event(%Event{id: event_id} = event, %Team{id: team_id} = team, user_id) do
     attrs = %{
       event_id: event_id,
       user_id: user_id,
       team_id: team_id,
-      event_role: (if event.user_id == user_id, do: "owner", else: "member"),
-      team_role: (if team.user_id == user_id, do: "owner", else: "member"),
+      event_role: if(event.user_id == user_id, do: "owner", else: "member"),
+      team_role: if(team.user_id == user_id, do: "owner", else: "member")
     }
+
     case get_event_user(event, user_id) do
       nil ->
         %EventTeamUser{}
@@ -91,7 +95,8 @@ defmodule Ahaboard.Events do
     end
   end
 
-  @spec leave_event(Event.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
+  @spec leave_event(Event.t(), binary()) ::
+          {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
   def leave_event(%Event{} = event, user_id) do
     event
     |> get_event_user(user_id)
@@ -111,14 +116,14 @@ defmodule Ahaboard.Events do
     Team
     |> where(event_id: ^id)
     |> Repo.all()
-    |> Enum.each(fn (team) ->
+    |> Enum.each(fn team ->
       team
-        |> Team.changeset_cache(%{
-          member_count: stats[team.id] || 0,
-          activity_count: 0,
-          total_distance: 0,
-        })
-        |> Repo.update()
+      |> Team.changeset_cache(%{
+        member_count: stats[team.id] || 0,
+        activity_count: 0,
+        total_distance: 0
+      })
+      |> Repo.update()
     end)
   end
 end

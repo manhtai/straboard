@@ -23,7 +23,7 @@ defmodule AhaboardWeb.EventController do
       params =
         event_params
         |> Map.merge(%{
-          "user_id" => user_id,
+          "user_id" => user_id
         })
 
       case Events.create_event(params) do
@@ -80,14 +80,20 @@ defmodule AhaboardWeb.EventController do
   defp render_event(conn, event) do
     current_user_id = get_session(conn, :current_user_id)
     teams = Teams.get_teams(event)
-    team_name = case Events.get_event_user(event, current_user_id) do
-      nil -> ""
-      event_user ->
-        team = teams
-        |> Enum.filter(fn (team) -> team.id == event_user.team_id end)
-        |> Enum.at(0)
-        team.name
-    end
+
+    team_name =
+      case Events.get_event_user(event, current_user_id) do
+        nil ->
+          ""
+
+        event_user ->
+          team =
+            teams
+            |> Enum.filter(fn team -> team.id == event_user.team_id end)
+            |> Enum.at(0)
+
+          team.name
+      end
 
     render(
       conn,
@@ -118,4 +124,3 @@ defmodule AhaboardWeb.EventController do
     end
   end
 end
-

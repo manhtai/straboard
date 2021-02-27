@@ -10,9 +10,10 @@ defmodule Ahaboard.Teams do
 
   @spec get_or_create_team_by_name!(Event.t(), binary(), String.t()) :: Team.t()
   def get_or_create_team_by_name!(%Event{id: id} = _event, user_id, name) do
-    team = Team
-           |> where(event_id: ^id, name: ^name)
-           |> Repo.one()
+    team =
+      Team
+      |> where(event_id: ^id, name: ^name)
+      |> Repo.one()
 
     case team do
       nil ->
@@ -20,7 +21,8 @@ defmodule Ahaboard.Teams do
         |> Team.changeset(%{name: name, event_id: id, user_id: user_id})
         |> Repo.insert!()
 
-      _ -> team
+      _ ->
+        team
     end
   end
 

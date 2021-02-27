@@ -17,4 +17,3 @@ defmodule AhaboardWeb.Plugs.RedirectUnauthenticated do
     end
   end
 end
-

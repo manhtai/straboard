@@ -23,7 +23,7 @@ defmodule Ahaboard.UserFromAuth do
         refresh_token: auth.credentials.refresh_token
       })
 
-    case Users.get_or_create(attrs) do
+    case Users.update_or_create(attrs) do
       {:ok, user} ->
         {:ok, user}
 

@@ -27,7 +27,7 @@ defmodule Ahaboard.Events.EventTeamUser do
       :event_id,
       :event_role,
       :team_id,
-      :team_role,
+      :team_role
     ])
     |> validate_required([:event_id, :user_id, :event_role])
   end

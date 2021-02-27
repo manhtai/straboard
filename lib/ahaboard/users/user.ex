@@ -44,4 +44,15 @@ defmodule Ahaboard.Users.User do
     ])
     |> validate_required([:provider, :uid])
   end
+
+  def refresh_token_changeset(user, attrs) do
+    user
+    |> cast(attrs, [
+      :token,
+      :token_expires_at,
+      :refresh_token,
+      :token_type
+    ])
+    |> validate_required([:token, :refresh_token])
+  end
 end
