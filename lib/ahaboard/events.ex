@@ -103,27 +103,15 @@ defmodule Ahaboard.Events do
     |> Repo.delete()
   end
 
-  def refresh_cache(%Event{id: id} = _event) do
-    stats =
-      from(etu in EventTeamUser,
-        group_by: etu.team_id,
-        select: {etu.team_id, count(etu.id)}
-      )
-      |> Repo.all()
+  def refresh_cache(%Event{id: id} = _event, sync \\ false) do
+    case sync do
+      false ->
+        %{event_id: id}
+        |> Ahaboard.EventRefreshCache.new()
+        |> Oban.insert()
 
-    stats = stats |> Enum.into(%{})
-
-    Team
-    |> where(event_id: ^id)
-    |> Repo.all()
-    |> Enum.each(fn team ->
-      team
-      |> Team.changeset_cache(%{
-        member_count: stats[team.id] || 0,
-        activity_count: 0,
-        total_distance: 0
-      })
-      |> Repo.update()
-    end)
+      true ->
+        Ahaboard.EventRefreshCache.perform(%Oban.Job{args: %{"event_id" => id}})
+    end
   end
 end

@@ -9,6 +9,7 @@ defmodule Ahaboard.Repo.Migrations.CreateEvents do
       add(:code, :string, null: false)
       add(:image, :string)
 
+      add(:type, :string, null: false, default: "Run")
       add(:start_date, :date, null: false)
       add(:end_date, :date, null: false)
       add(:location, :string)

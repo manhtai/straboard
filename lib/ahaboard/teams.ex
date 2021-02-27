@@ -30,6 +30,13 @@ defmodule Ahaboard.Teams do
   def get_teams(%Event{id: id} = _event) do
     Team
     |> where(event_id: ^id)
+    |> order_by(desc: :total_distance)
     |> Repo.all()
+  end
+
+  @spec get_by_id(binary()) :: nil | Team.t()
+  def get_by_id(id) do
+    Team
+    |> Repo.get(id)
   end
 end

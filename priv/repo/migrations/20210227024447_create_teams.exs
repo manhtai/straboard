@@ -8,9 +8,9 @@ defmodule Ahaboard.Repo.Migrations.CreateTeams do
       add(:name, :string, null: false)
       add(:image, :string)
 
-      add(:member_count, :integer)
-      add(:activity_count, :integer)
-      add(:total_distance, :float)
+      add(:member_count, :integer, default: 0)
+      add(:activity_count, :integer, default: 0)
+      add(:total_distance, :float, default: 0.0)
 
       add(
         :user_id,

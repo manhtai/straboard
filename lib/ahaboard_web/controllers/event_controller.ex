@@ -63,7 +63,7 @@ defmodule AhaboardWeb.EventController do
       team = Teams.get_or_create_team_by_name!(event, user_id, team_name)
 
       Events.join_event(event, team, user_id)
-      Events.refresh_cache(event)
+      Events.refresh_cache(event, true)
       redirect(conn, to: "/events/" <> event.id)
     end
   end
@@ -73,11 +73,14 @@ defmodule AhaboardWeb.EventController do
     with %User{id: user_id} <- conn.assigns.current_user do
       event = Events.get_event!(id)
       Events.leave_event(event, user_id)
+      Events.refresh_cache(event, true)
       redirect(conn, to: "/events/" <> event.id)
     end
   end
 
   defp render_event(conn, event) do
+    Events.refresh_cache(event, false)
+
     current_user_id = get_session(conn, :current_user_id)
     teams = Teams.get_teams(event)
 

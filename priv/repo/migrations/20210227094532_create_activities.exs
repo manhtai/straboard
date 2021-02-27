@@ -13,6 +13,7 @@ defmodule Ahaboard.Repo.Migrations.CreateActivities do
       add(:average_speed, :float)
       add(:type, :string)
       add(:start_date, :utc_datetime)
+      add(:start_date_local, :naive_datetime)
 
       add(
         :user_id,

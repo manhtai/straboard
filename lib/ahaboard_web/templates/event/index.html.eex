@@ -44,6 +44,10 @@
     </label>
 
     <label>
+      Event type: <%= select f, :type, ["Run", "Swim", "Ride"], required: true %>
+    </label>
+
+    <label>
       Event start: <%= date_input f, :start_date, required: true %>
     </label>
 

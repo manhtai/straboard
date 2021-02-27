@@ -38,7 +38,7 @@
         <th>Team</th>
         <th>No. of members</th>
         <th>No. of activities</th>
-        <th>Total distance</th>
+        <th>Total distance (km)</th>
       </tr>
     </thead>
     <tbody>
@@ -50,7 +50,7 @@
           </td>
           <td><%= team.member_count %></td>
           <td><%= team.activity_count %></td>
-          <td><%= team.total_distance %></td>
+          <td><%= (team.total_distance / 1_000) |> Float.round(1) %></td>
         </tr>
       <% end %>
     </tbody>

@@ -14,6 +14,7 @@ defmodule Ahaboard.Events.Event do
     field(:code, :string)
     field(:image, :string)
 
+    field(:type, :string, default: "Run")
     field(:start_date, :date)
     field(:end_date, :date)
     field(:location, :string)

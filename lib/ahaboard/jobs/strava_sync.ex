@@ -28,12 +28,14 @@ defmodule Ahaboard.StravaSync do
       {:ok, activities} ->
         activities
         |> Enum.each(fn activity ->
-          attrs = activity
-                  |> Map.from_struct()
-                  |> Map.merge(%{
-                    user_id: user.id,
-                    uid: Integer.to_string(activity.id),
-                  })
+          attrs =
+            activity
+            |> Map.from_struct()
+            |> Map.merge(%{
+              user_id: user.id,
+              uid: Integer.to_string(activity.id)
+            })
+
           Activities.update_or_create(attrs)
         end)
 
@@ -43,7 +45,4 @@ defmodule Ahaboard.StravaSync do
         :error
     end
   end
-
-  @impl Oban.Worker
-  def timeout(_job), do: :timer.seconds(30)
 end

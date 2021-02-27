@@ -19,6 +19,7 @@ defmodule Ahaboard.Users.Activity do
     field(:type, :string)
 
     field(:start_date, :utc_datetime)
+    field(:start_date_local, :naive_datetime)
 
     belongs_to(:user, User, foreign_key: :user_id, references: :id, type: :binary_id)
 
@@ -36,7 +37,8 @@ defmodule Ahaboard.Users.Activity do
       :elapsed_time,
       :average_speed,
       :type,
-      :start_date
+      :start_date,
+      :start_date_local
     ])
     |> validate_required([:name, :uid, :user_id])
   end
