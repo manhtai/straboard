@@ -1,11 +1,9 @@
 defmodule AhaboardWeb.EventController do
   use AhaboardWeb, :controller
 
-  alias Ecto.Changeset
   alias Ahaboard.Users.User
   alias Ahaboard.Events
   alias Ahaboard.Events.Event
-  alias AhaboardWeb.ErrorHelpers
   alias Ahaboard.StringUtil
 
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
@@ -95,7 +93,7 @@ defmodule AhaboardWeb.EventController do
       event: event,
       current_user_id: current_user_id,
       team_name: team_name,
-      teams: teams,
+      teams: teams
     )
   end
 

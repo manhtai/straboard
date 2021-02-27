@@ -19,6 +19,11 @@ defmodule Ahaboard.Events.Team do
     has_many(:event_team_users, EventTeamUser)
     has_many(:users, through: [:event_team_users, :team])
 
+    # Cache fields
+    field(:member_count, :integer)
+    field(:activity_count, :integer)
+    field(:total_distance, :float)
+
     timestamps()
   end
 

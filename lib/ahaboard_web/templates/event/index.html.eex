@@ -13,6 +13,9 @@
         <%= link "Share", to: Routes.event_path(@conn, :show_by_code, event.code) %>
       </li>
     <% end %>
+    <%= if @created_events == [] do %>
+      <li>No events is created yet.</li>
+    <% end %>
   </ul>
 
   <h2>Joined events:</h2>
@@ -22,8 +25,11 @@
         <a href="<%= Routes.event_path @conn, :show, event %>">
           <%= event.name %>
         </a> created <%= Timex.format!(event.inserted_at, "{relative}", :relative) %>
-        <%= link "Share", to: Routes.event_path(@conn, :show_by_code, event.code) %>
+        <%= link "Share", to: Routes.event_path(@conn, :show_by_code, event.code), target: "_new" %>
       </li>
+    <% end %>
+    <%= if @joined_events == [] do %>
+      <li>No events is joined yet.</li>
     <% end %>
   </ul>
 
@@ -35,6 +41,14 @@
 
     <label>
       Event code: <%= text_input f, :code, required: true %>
+    </label>
+
+    <label>
+      Event start: <%= date_input f, :start_date, required: true %>
+    </label>
+
+    <label>
+      Event end: <%= date_input f, :end_date, required: true %>
     </label>
 
     <%= submit "Create" %>
