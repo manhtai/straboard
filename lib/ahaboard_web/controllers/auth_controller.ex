@@ -30,7 +30,7 @@ defmodule AhaboardWeb.AuthController do
         |> put_flash(:info, "Successfully authenticated.")
         |> put_session(:current_user_id, user.id)
         |> configure_session(renew: true)
-        |> redirect(to: "/events")
+        |> redirect(to: get_session(conn, "next") || "/events")
 
       {:error, reason} ->
         conn

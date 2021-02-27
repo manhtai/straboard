@@ -6,12 +6,15 @@ defmodule AhaboardWeb.EventController do
   alias Ahaboard.Events
   alias Ahaboard.Events.Event
   alias AhaboardWeb.ErrorHelpers
+  alias Ahaboard.StringUtil
 
   @spec index(Plug.Conn.t(), map) :: Plug.Conn.t()
   def index(conn, params) do
     with %User{id: user_id} <- conn.assigns.current_user do
-      events = Events.list_events(user_id, params)
-      render(conn, "index.html", events: events)
+      created_events = Events.created_events(user_id, params)
+      joined_events = Events.joined_events(user_id, params)
+
+      render(conn, "index.html", created_events: created_events, joined_events: joined_events)
     end
   end
 
@@ -27,12 +30,13 @@ defmodule AhaboardWeb.EventController do
       case Events.create_event(params) do
         {:ok, %Event{} = event} ->
           conn
-          |> render("show.html", event: event)
+          |> put_flash(:info, "Create event success!")
+          |> redirect(to: "/events/" <> event.id)
 
         {:error, changeset} ->
-          errors = Changeset.traverse_errors(changeset, &ErrorHelpers.translate_error/1)
           conn
-          |> render("show.html", event: nil, errors: errors)
+          |> put_flash(:error, StringUtil.changeset_error_to_string(changeset))
+          |> redirect(to: "/events")
       end
     end
   end
@@ -103,11 +107,13 @@ defmodule AhaboardWeb.EventController do
       case Events.update_event(event, event_params) do
         {:ok, %Event{} = event} ->
           conn
-          |> render("show.html", event: event)
+          |> put_flash(:info, "Update event success!")
+          |> render_event(event)
+
         {:error, changeset} ->
-          errors = Changeset.traverse_errors(changeset, &ErrorHelpers.translate_error/1)
           conn
-          |> render("show.html", event: event, errors: errors)
+          |> put_flash(:error, StringUtil.changeset_error_to_string(changeset))
+          |> render_event(event)
       end
     end
   end

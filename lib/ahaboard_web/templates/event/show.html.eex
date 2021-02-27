@@ -4,7 +4,32 @@
   <% end %>
 </section>
 
+<section>
+  <table>
+    <thead>
+      <tr>
+        <th>Team</th>
+        <th># members</th>
+        <th># activities</th>
+        <th># distance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for team <- @teams do %>
+        <tr>
+          <td><%= team.name %></td>
+          <td>3</td>
+          <td>15</td>
+          <td>15km</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
 <%= if @current_user_id do %>
+  <hr />
+
   <section>
     <%= form_for @conn, Routes.event_path(@conn, :join, id: @event.id), fn _f -> %>
       <input
@@ -26,8 +51,10 @@
       <% end %>
     <% end %>
   </section>
-<% end %>
 
-<section>
-    <%= link "< My events", to: Routes.event_path(@conn, :index), class: "button button-clear" %>
-</section>
+  <section>
+      <%= link "< My events", to: Routes.event_path(@conn, :index) %>
+  </section>
+<% else %>
+  <%= link "Join this event", to: Routes.event_path(@conn, :show, @event.id), class: "button button-outline" %>
+<% end %>

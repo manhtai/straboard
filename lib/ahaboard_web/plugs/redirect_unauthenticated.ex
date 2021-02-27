@@ -10,7 +10,7 @@ defmodule AhaboardWeb.Plugs.RedirectUnauthenticated do
     case get_session(conn, "current_user_id") do
       nil ->
         conn = put_session(conn, "next", conn.request_path)
-        redirect(conn, to: "/welcome") |> halt
+        redirect(conn, to: "/auth/strava") |> halt
 
       _user ->
         conn

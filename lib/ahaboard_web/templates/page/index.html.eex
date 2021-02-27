@@ -1,13 +1,13 @@
 <section class="phx-hero">
-  <h1>Welcome to Ahaboard!</h1>
+  <%= if @current_user_id do %>
+    <h1>Welcome <%= @conn.assigns.current_user.name %>!</h1>
+  <% else %>
+    <h1>Welcome to Ahaboard!</h1>
+  <% end %>
   <p>
-    Beautiful leaderboards for teams to compete!
+    Go create beautiful leaderboards for your teams!
   </p>
   <%= if @current_user_id do %>
-    <h2>Welcome, <%= @conn.assigns.current_user.name %>!</h2>
-    <div>
-      <img src="<%= @current_user.image %>" />
-    </div>
     <%= link "My events", to: Routes.event_path(@conn, :index), class: "button" %>
     <%= link "Logout", to: Routes.auth_path(@conn, :delete), method: "delete", class: "button button-outline" %>
     <br>

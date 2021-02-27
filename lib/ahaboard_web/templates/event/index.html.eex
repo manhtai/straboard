@@ -3,25 +3,42 @@
 </section>
 
 <section>
+  <h2>Created events:</h2>
   <ul>
-    <%= for event <- @events do %>
+    <%= for event <- @created_events do %>
       <li>
         <a href="<%= Routes.event_path @conn, :show, event %>">
           <%= event.name %>
         </a> created <%= Timex.format!(event.inserted_at, "{relative}", :relative) %>
+        <%= link "Share", to: Routes.event_path(@conn, :show_by_code, event.code) %>
       </li>
     <% end %>
   </ul>
 
+  <h2>Joined events:</h2>
+  <ul>
+    <%= for event <- @joined_events do %>
+      <li>
+        <a href="<%= Routes.event_path @conn, :show, event %>">
+          <%= event.name %>
+        </a> created <%= Timex.format!(event.inserted_at, "{relative}", :relative) %>
+        <%= link "Share", to: Routes.event_path(@conn, :show_by_code, event.code) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2>Create new event:</h2>
   <%= form_for @conn, Routes.event_path(@conn, :create), fn f -> %>
     <label>
-      Event name: <%= text_input f, :name %>
+      Event name: <%= text_input f, :name, required: true %>
     </label>
 
     <label>
-      Event code: <%= text_input f, :code %>
+      Event code: <%= text_input f, :code, required: true %>
     </label>
 
     <%= submit "Create" %>
   <% end %>
+
+  <%= link "< Home", to: Routes.page_path(@conn, :index) %>
 </section>

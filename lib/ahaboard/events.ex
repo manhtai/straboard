@@ -8,26 +8,24 @@ defmodule Ahaboard.Events do
   alias Ahaboard.Repo
   alias Ahaboard.Events.{Event, Team, EventTeamUser}
 
-  @spec list_events(binary(), map) :: [Event.t()]
-  def list_events(user_id, params) do
-    Event
-    |> where(user_id: ^user_id)
-    |> where(^filter_where(params))
-    |> order_by(desc: :updated_at)
-    |> limit(100)
+  @spec joined_events(binary(), map) :: [Event.t()]
+  def joined_events(user_id, _params) do
+    from(etv in EventTeamUser,
+      where: etv.user_id == ^user_id,
+      inner_join: event in Event,
+      on: event.id == etv.event_id,
+      order_by: [desc: event.inserted_at],
+      select: event
+    )
     |> Repo.all()
   end
 
-  @spec filter_where(map) :: Ecto.Query.DynamicExpr.t()
-  def filter_where(params) do
-    Enum.reduce(params, dynamic(true), fn
-      {"q", value}, dynamic ->
-        dynamic([p], ^dynamic and ilike(p.name, ^"%#{value}%"))
-
-      {_, _}, dynamic ->
-        # Not a where parameter
-        dynamic
-    end)
+  @spec created_events(binary(), map) :: [Event.t()]
+  def created_events(user_id, _params) do
+    Event
+    |> where(user_id: ^user_id)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
   end
 
   @spec get_event!(binary()) :: Event.t() | nil
@@ -62,9 +60,13 @@ defmodule Ahaboard.Events do
 
   @spec get_event_user(Event.t(), binary()) :: nil | EventTeamUser.t()
   def get_event_user(%Event{id: id} = _event, user_id) do
-    EventTeamUser
-    |> where(event_id: ^id, user_id: ^user_id)
-    |> Repo.one()
+    case user_id do
+      nil -> nil
+      _ ->
+        EventTeamUser
+        |> where(event_id: ^id, user_id: ^user_id)
+        |> Repo.one()
+    end
   end
 
   @spec get_teams(Event.t()) :: nil | [Team.t()]
