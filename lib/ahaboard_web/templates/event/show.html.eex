@@ -21,6 +21,9 @@
         <% end %>
       </datalist>
       <%= submit gettext "%{label}", label: if @team_name == "", do: "Join", else: "Change team" %>
+      <%= if @team_name != "" do %>
+        <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-outline" %>
+      <% end %>
     <% end %>
   </section>
 <% end %>

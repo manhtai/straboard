@@ -34,6 +34,7 @@ defmodule AhaboardWeb.Router do
     pipe_through([:browser, :authentication_required])
 
     post "/join_event", EventController, :join
+    post "/leave_event", EventController, :leave
 
     resources("/", EventController)
   end
