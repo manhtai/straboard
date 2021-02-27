@@ -1,0 +1,17 @@
+<section class="phx-hero">
+  <h1>Welcome to Straboard!</h1>
+
+  <p>
+    Create your own Strava custom team leaderboards
+  </p>
+
+  <a class="button" href="<%= Routes.auth_path(@conn, :request, "strava") %>">
+    Continue with Strava
+  </a>
+</section>
+
+<section>
+  <hr />
+  <%= link "< Report issues", to: "https://github.com/manhtai/straboard/issues/new" %>
+  <%= link "Source code >", to: "https://github.com/manhtai/straboard", class: "float-right" %>
+</section>

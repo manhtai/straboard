@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(Stravamate.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Straboard.Repo, :manual)

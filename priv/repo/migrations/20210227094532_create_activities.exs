@@ -1,4 +1,4 @@
-defmodule Stravamate.Repo.Migrations.CreateActivities do
+defmodule Straboard.Repo.Migrations.CreateActivities do
   use Ecto.Migration
 
   def change do

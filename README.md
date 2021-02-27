@@ -1,4 +1,4 @@
-# Stravamate
+# Straboard
 
 To start your Phoenix server:
 

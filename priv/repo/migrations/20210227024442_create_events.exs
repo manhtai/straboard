@@ -1,4 +1,4 @@
-defmodule Stravamate.Repo.Migrations.CreateEvents do
+defmodule Straboard.Repo.Migrations.CreateEvents do
   use Ecto.Migration
 
   def change do
