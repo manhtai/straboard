@@ -6,7 +6,7 @@
   <%= if @current_user do %>
     <h2>Welcome, <%= @current_user.name %>!</h2>
     <div>
-      <img src="<%= @current_user.avatar %>" />
+      <img src="<%= @current_user.image %>" />
     </div>
     <%= link "Logout", to: Routes.auth_path(@conn, :delete), method: "delete", class: "button" %>
     <br>

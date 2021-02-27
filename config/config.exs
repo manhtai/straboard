@@ -45,7 +45,7 @@ end
 # Auth
 config :ueberauth, Ueberauth,
   providers: [
-    strava: {Ueberauth.Strategy.Strava, [default_scope: "profile:read_all,activity:read"]}
+    strava: {Ueberauth.Strategy.Strava, [default_scope: "activity:read"]}
   ]
 
 config :ueberauth, Ueberauth.Strategy.Strava.OAuth,

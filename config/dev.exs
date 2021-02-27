@@ -6,7 +6,7 @@ config :ahaboard, Ahaboard.Repo,
   password: "postgres",
   database: "ahaboard_dev",
   hostname: "localhost",
-  port: System.get_env("DATABASE_PORT") || 25432,
+  port: System.get_env("DATABASE_PORT") || 25_432,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

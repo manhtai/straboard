@@ -1,13 +1,8 @@
 defmodule Ueberauth.Strategy.Strava.OAuth do
   @moduledoc """
   OAuth2 for Strava.
-
-  Add `client_id` and `client_secret` to your configuration:
-
-  config :ueberauth, Ueberauth.Strategy.Strava.OAuth,
-    client_id: System.get_env("Strava_APP_ID"),
-    client_secret: System.get_env("Strava_APP_SECRET")
   """
+
   use OAuth2.Strategy
 
   @defaults [
@@ -17,13 +12,6 @@ defmodule Ueberauth.Strategy.Strava.OAuth do
     token_url: "https://www.strava.com/oauth/token"
   ]
 
-  @doc """
-  Construct a client for requests to Strava.
-
-  This will be setup automatically for you in `Ueberauth.Strategy.Strava`.
-  These options are only useful for usage outside the normal callback phase
-  of Ueberauth.
-  """
   def client(opts \\ []) do
     config = Application.get_env(:ueberauth, Ueberauth.Strategy.Strava.OAuth)
 
@@ -33,13 +21,9 @@ defmodule Ueberauth.Strategy.Strava.OAuth do
       |> Keyword.merge(opts)
 
     OAuth2.Client.new(opts)
-      |> OAuth2.Client.put_serializer("application/json", Ueberauth.json_library())
+    |> OAuth2.Client.put_serializer("application/json", Ueberauth.json_library())
   end
 
-  @doc """
-  Provides the authorize url for the request phase of Ueberauth.
-  No need to call this usually.
-  """
   def authorize_url!(params \\ [], opts \\ []) do
     opts
     |> client
@@ -63,8 +47,6 @@ defmodule Ueberauth.Strategy.Strava.OAuth do
     |> Keyword.take([:client_id, :client_secret])
     |> Keyword.merge(params)
   end
-
-  # Strategy Callbacks
 
   def authorize_url(client, params) do
     OAuth2.Strategy.AuthCode.authorize_url(client, params)
