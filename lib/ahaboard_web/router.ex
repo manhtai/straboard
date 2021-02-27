@@ -1,6 +1,8 @@
 defmodule AhaboardWeb.Router do
   use AhaboardWeb, :router
 
+  alias AhaboardWeb.Plugs
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,10 +10,15 @@ defmodule AhaboardWeb.Router do
     plug :put_root_layout, {AhaboardWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug(Plugs.SetCurrentUserOnAssigns)
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :authentication_required do
+    plug(Plugs.RedirectUnauthenticated)
   end
 
   scope "/auth", AhaboardWeb do
@@ -21,6 +28,12 @@ defmodule AhaboardWeb.Router do
     get "/:provider/callback", AuthController, :callback
     post "/:provider/callback", AuthController, :callback
     delete "/logout", AuthController, :delete
+  end
+
+  scope "/events", AhaboardWeb do
+    pipe_through([:browser, :authentication_required])
+
+    resources("/", EventController)
   end
 
   scope "/", AhaboardWeb do

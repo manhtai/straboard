@@ -24,8 +24,8 @@ defmodule Ahaboard.UserFromAuth do
       })
 
     case Users.get_or_create(attrs) do
-      {:ok, _user} ->
-        {:ok, basic_attrs}
+      {:ok, user} ->
+        {:ok, user}
 
       {:error, changeset} ->
         errors = Changeset.traverse_errors(changeset, &ErrorHelpers.translate_error/1)

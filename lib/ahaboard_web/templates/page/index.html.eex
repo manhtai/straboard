@@ -3,12 +3,13 @@
   <p>
     Beautiful leaderboards for teams to compete!
   </p>
-  <%= if @current_user do %>
-    <h2>Welcome, <%= @current_user.name %>!</h2>
+  <%= if @current_user_id do %>
+    <h2>Welcome, <%= @conn.assigns.current_user.name %>!</h2>
     <div>
       <img src="<%= @current_user.image %>" />
     </div>
-    <%= link "Logout", to: Routes.auth_path(@conn, :delete), method: "delete", class: "button" %>
+    <%= link "My events", to: Routes.event_path(@conn, :index), class: "button" %>
+    <%= link "Logout", to: Routes.auth_path(@conn, :delete), method: "delete", class: "button button-outline" %>
     <br>
   <% else %>
     <a class="button" href="<%= Routes.auth_path(@conn, :request, "strava") %>">

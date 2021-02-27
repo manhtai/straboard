@@ -1,0 +1,9 @@
+<section class="phx-hero">
+  <%= if @event do %>
+    <h1><%= @event.name %></h1>
+  <% end %>
+</section>
+
+<section>
+    <%= link "< My events", to: Routes.event_path(@conn, :index), class: "button button-clear" %>
+</section>
