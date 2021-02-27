@@ -1,12 +1,12 @@
-defmodule AhaboardWeb do
+defmodule StravamateWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use AhaboardWeb, :controller
-      use AhaboardWeb, :view
+      use StravamateWeb, :controller
+      use StravamateWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,19 +19,19 @@ defmodule AhaboardWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: AhaboardWeb
+      use Phoenix.Controller, namespace: StravamateWeb
 
       import Plug.Conn
-      import AhaboardWeb.Gettext
-      alias AhaboardWeb.Router.Helpers, as: Routes
+      import StravamateWeb.Gettext
+      alias StravamateWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/ahaboard_web/templates",
-        namespace: AhaboardWeb
+        root: "lib/stravamate_web/templates",
+        namespace: StravamateWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -45,7 +45,7 @@ defmodule AhaboardWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {AhaboardWeb.LayoutView, "live.html"}
+        layout: {StravamateWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
     end
@@ -72,7 +72,7 @@ defmodule AhaboardWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import AhaboardWeb.Gettext
+      import StravamateWeb.Gettext
     end
   end
 
@@ -87,9 +87,9 @@ defmodule AhaboardWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import AhaboardWeb.ErrorHelpers
-      import AhaboardWeb.Gettext
-      alias AhaboardWeb.Router.Helpers, as: Routes
+      import StravamateWeb.ErrorHelpers
+      import StravamateWeb.Gettext
+      alias StravamateWeb.Router.Helpers, as: Routes
     end
   end
 

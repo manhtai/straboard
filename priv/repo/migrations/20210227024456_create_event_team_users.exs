@@ -1,4 +1,4 @@
-defmodule Ahaboard.Repo.Migrations.CreateEventTeamUsers do
+defmodule Stravamate.Repo.Migrations.CreateEventTeamUsers do
   use Ecto.Migration
 
   def change do

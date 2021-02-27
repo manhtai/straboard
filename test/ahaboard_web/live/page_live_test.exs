@@ -1,5 +1,5 @@
-defmodule AhaboardWeb.PageLiveTest do
-  use AhaboardWeb.ConnCase
+defmodule StravamateWeb.PageLiveTest do
+  use StravamateWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

@@ -1,9 +1,9 @@
-defmodule Ahaboard.MixProject do
+defmodule Stravamate.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :ahaboard,
+      app: :stravamate,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Ahaboard.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Ahaboard.Application, [:ueberauth_strava]},
+      mod: {Stravamate.Application, [:ueberauth_strava]},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

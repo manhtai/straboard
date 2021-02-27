@@ -1,4 +1,4 @@
-defmodule AhaboardWeb.ChannelCase do
+defmodule StravamateWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule AhaboardWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use AhaboardWeb.ChannelCase, async: true`, although
+  by setting `use StravamateWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule AhaboardWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import AhaboardWeb.ChannelCase
+      import StravamateWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint AhaboardWeb.Endpoint
+      @endpoint StravamateWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Ahaboard.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Stravamate.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Ahaboard.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Stravamate.Repo, {:shared, self()})
     end
 
     :ok

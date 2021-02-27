@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :ahaboard, Ahaboard.Repo,
+config :stravamate, Stravamate.Repo,
   username: "postgres",
   password: "postgres",
-  database: "ahaboard_dev",
+  database: "stravamate_dev",
   hostname: "localhost",
   port: System.get_env("DATABASE_PORT") || 25_432,
   show_sensitive_data_on_connection_error: true,
@@ -16,7 +16,7 @@ config :ahaboard, Ahaboard.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :ahaboard, AhaboardWeb.Endpoint,
+config :stravamate, StravamateWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -56,13 +56,13 @@ config :ahaboard, AhaboardWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :ahaboard, AhaboardWeb.Endpoint,
+config :stravamate, StravamateWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/ahaboard_web/(live|views)/.*(ex)$",
-      ~r"lib/ahaboard_web/templates/.*(eex)$"
+      ~r"lib/stravamate_web/(live|views)/.*(ex)$",
+      ~r"lib/stravamate_web/templates/.*(eex)$"
     ]
   ]
 

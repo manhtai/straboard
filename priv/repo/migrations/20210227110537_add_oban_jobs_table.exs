@@ -1,4 +1,4 @@
-defmodule Ahaboard.Repo.Migrations.AddObanJobsTable do
+defmodule Stravamate.Repo.Migrations.AddObanJobsTable do
   use Ecto.Migration
 
   def up do

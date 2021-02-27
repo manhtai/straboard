@@ -1,4 +1,4 @@
-# Ahaboard
+# Stravamate
 
 To start your Phoenix server:
 

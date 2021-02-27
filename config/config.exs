@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :ahaboard,
-  ecto_repos: [Ahaboard.Repo]
+config :stravamate,
+  ecto_repos: [Stravamate.Repo]
 
 # Configures the endpoint
-config :ahaboard, AhaboardWeb.Endpoint,
+config :stravamate, StravamateWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "iAFhezTumNEe855yGemevUOBHhp6sXvNg8PaknHYBJwihzCu1vAy9SlE60LpJEI/",
-  render_errors: [view: AhaboardWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Ahaboard.PubSub,
+  render_errors: [view: StravamateWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: Stravamate.PubSub,
   live_view: [signing_salt: "+Ylg7jPE"]
 
 # Configures Elixir's Logger
@@ -52,14 +52,14 @@ config :ueberauth, Ueberauth.Strategy.Strava.OAuth,
   client_id: System.get_env("STRAVA_CLIENT_ID"),
   client_secret: System.get_env("STRAVA_CLIENT_SECRET")
 
-config :ahaboard, Oban,
-  repo: Ahaboard.Repo,
+config :stravamate, Oban,
+  repo: Stravamate.Repo,
   plugins: [
     Oban.Plugins.Pruner,
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 * * * *", Ahaboard.StravaHourlySync}
-       # {"0 0 * * *", Ahaboard.StravaDailySync},
+       {"0 * * * *", Stravamate.StravaHourlySync}
+       # {"0 0 * * *", Stravamate.StravaDailySync},
      ]}
   ],
   queues: [default: 10, pro: 50]

@@ -1,6 +1,6 @@
-defmodule Ahaboard do
+defmodule Stravamate do
   @moduledoc """
-  Ahaboard keeps the contexts that define your domain
+  Stravamate keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless
