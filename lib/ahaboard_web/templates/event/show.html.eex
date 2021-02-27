@@ -4,7 +4,20 @@
   <% end %>
 </section>
 
+<%= if @current_user_id do %>
+  <section>
+    <%= form_for @conn, Routes.event_path(@conn, :join, id: @event.id), fn f -> %>
+      <input type="text" name="team_name" value="<%= @team_name %>" placeholder="Choose a team" list="teams" autocomplete="off"/>
+      <datalist id="teams">
+        <%= for team <- @teams do %>
+          <option value="<%= team.name %>"><%= team.name %></option>
+        <% end %>
+      </datalist>
+      <%= submit "Join" %>
+    <% end %>
+  </section>
+<% end %>
+
 <section>
     <%= link "< My events", to: Routes.event_path(@conn, :index), class: "button button-clear" %>
-    <%= link "Join this event", to: Routes.event_path(@conn, :join, id: @event.id), method: "POST", class: "button button-outline" %>
 </section>

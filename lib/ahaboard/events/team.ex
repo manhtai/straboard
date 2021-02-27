@@ -9,7 +9,7 @@ defmodule Ahaboard.Events.Team do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  schema "events" do
+  schema "teams" do
     field(:name, :string)
     field(:image, :string)
 

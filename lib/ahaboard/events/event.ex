@@ -44,8 +44,9 @@ defmodule Ahaboard.Events.Event do
 
   def clean_code(changeset) do
     code = get_field(changeset, :code)
-    code = Regex.replace(~r/[^a-z\d]+/, code, fn _, _match -> "-" end)
+    code = code
            |> String.downcase()
+           |> String.replace(~r"[^a-z\d]+", "-")
     put_change(changeset, :code, code)
   end
 end

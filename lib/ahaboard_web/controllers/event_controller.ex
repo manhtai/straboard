@@ -40,14 +40,16 @@ defmodule AhaboardWeb.EventController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     event = Events.get_event!(id)
-    render(conn, "show.html", event: event)
+    render_event(conn, event)
   end
 
   @spec join(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def join(conn, %{"id" => id}) do
+  def join(conn, %{"id" => id, "team_name" => team_name}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       event = Events.get_event!(id)
-      Events.join_event(event, user_id)
+      team = Events.get_or_create_team_by_name!(event, user_id, team_name)
+
+      Events.join_event(event, team, user_id)
       redirect(conn, to: "/events/" <> event.id)
     end
   end
@@ -55,10 +57,24 @@ defmodule AhaboardWeb.EventController do
   @spec show_by_code(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show_by_code(conn, %{"code" => code}) do
     event = Events.get_event_by_code(code)
+
     case event do
       nil -> redirect(conn, to: "/")
-      _ -> render(conn, "show.html", event: event)
+      _ -> render_event(conn, event)
     end
+  end
+
+  defp render_event(conn, event) do
+    current_user_id = get_session(conn, :current_user_id)
+
+    render(
+      conn,
+      "show.html",
+      event: event,
+      current_user_id: current_user_id,
+      team_name: "",
+      teams: Events.get_teams(event)
+    )
   end
 
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()

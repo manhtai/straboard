@@ -2,5 +2,13 @@
   <h1><%= gettext "Welcome to %{name}!", name: "Ahaboard" %></h1>
   <p>Beautiful leader board for teams to compete!</p>
 
-  <button type="submit">Log with Strava</button>
+  <form phx-change="suggest" phx-submit="search">
+    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
+    <datalist id="results">
+      <%= for {app, _vsn} <- @results do %>
+        <option value="<%= app %>"><%= app %></option>
+      <% end %>
+    </datalist>
+    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
+  </form>
 </section>

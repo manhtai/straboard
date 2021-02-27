@@ -32,5 +32,7 @@ defmodule Ahaboard.Repo.Migrations.CreateTeams do
 
       timestamps()
     end
+
+    create(unique_index(:teams, [:event_id, :name]))
   end
 end

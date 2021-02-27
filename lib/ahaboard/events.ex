@@ -6,7 +6,7 @@ defmodule Ahaboard.Events do
   import Ecto.Query
 
   alias Ahaboard.Repo
-  alias Ahaboard.Events.{Event, EventTeamUser}
+  alias Ahaboard.Events.{Event, Team, EventTeamUser}
 
   @spec list_events(binary(), map) :: [Event.t()]
   def list_events(user_id, params) do
@@ -67,15 +67,40 @@ defmodule Ahaboard.Events do
     |> Repo.one()
   end
 
-  @spec join_event(Event.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
-  def join_event(%Event{id: id} = event, user_id) do
+  @spec get_teams(Event.t()) :: nil | [Team.t()]
+  def get_teams(%Event{id: id} = _event) do
+    Team
+    |> where(event_id: ^id)
+    |> Repo.all()
+  end
+
+  @spec get_or_create_team_by_name!(Event.t(), binary(), String.t()) :: Team.t()
+  def get_or_create_team_by_name!(%Event{id: id} = _event, user_id, name) do
+    team = Team
+           |> where(event_id: ^id, name: ^name)
+           |> Repo.one()
+
+    case team do
+      nil ->
+        %Team{}
+        |> Team.changeset(%{name: name, event_id: id, user_id: user_id})
+        |> Repo.insert!()
+
+      _ -> team
+    end
+  end
+
+  @spec join_event(Event.t(), Team.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
+  def join_event(%Event{id: event_id} = event, %Team{id: team_id} = team, user_id) do
     case get_event_user(event, user_id) do
       nil ->
         %EventTeamUser{}
         |> EventTeamUser.changeset(%{
-          event_id: id,
+          event_id: event_id,
           user_id: user_id,
-          event_role: (if event.user_id == user_id, do: "owner", else: "member")
+          team_id: team_id,
+          event_role: (if event.user_id == user_id, do: "owner", else: "member"),
+          team_role: (if team.user_id == user_id, do: "owner", else: "member"),
         })
         |> Repo.insert()
 
