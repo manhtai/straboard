@@ -3,6 +3,7 @@ defmodule AhaboardWeb.EventController do
 
   alias Ahaboard.Users.User
   alias Ahaboard.Events
+  alias Ahaboard.Teams
   alias Ahaboard.Events.Event
   alias Ahaboard.StringUtil
 
@@ -59,9 +60,10 @@ defmodule AhaboardWeb.EventController do
   def join(conn, %{"id" => id, "team_name" => team_name}) do
     with %User{id: user_id} <- conn.assigns.current_user do
       event = Events.get_event!(id)
-      team = Events.get_or_create_team_by_name!(event, user_id, team_name)
+      team = Teams.get_or_create_team_by_name!(event, user_id, team_name)
 
       Events.join_event(event, team, user_id)
+      Events.refresh_cache(event)
       redirect(conn, to: "/events/" <> event.id)
     end
   end
@@ -77,7 +79,7 @@ defmodule AhaboardWeb.EventController do
 
   defp render_event(conn, event) do
     current_user_id = get_session(conn, :current_user_id)
-    teams = Events.get_teams(event)
+    teams = Teams.get_teams(event)
     team_name = case Events.get_event_user(event, current_user_id) do
       nil -> ""
       event_user ->

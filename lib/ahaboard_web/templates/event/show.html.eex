@@ -4,6 +4,33 @@
   <% end %>
 </section>
 
+
+<%= if @current_user_id == @event.user_id do %>
+  <section>
+    <%= form_for @conn, Routes.event_path(@conn, :update, @event.id), fn f -> %>
+      <label>
+        Event name: <%= text_input f, :name, value: @event.name, required: true %>
+      </label>
+
+      <label>
+        Event code: <%= text_input f, :code, value: @event.code, required: true %>
+      </label>
+
+      <label>
+        Event start: <%= date_input f, :start_date, value: @event.start_date, required: true %>
+      </label>
+
+      <label>
+        Event end: <%= date_input f, :end_date, value: @event.end_date, required: true %>
+      </label>
+
+      <%= submit "Update" %>
+    <% end %>
+  </section>
+  <hr />
+<% end %>
+
+
 <section>
   <table>
     <thead>
@@ -17,7 +44,10 @@
     <tbody>
       <%= for team <- @teams do %>
         <tr>
-          <td><%= team.name %></td>
+          <td>
+            <%= team.name %>
+            <em><%= if team.name == @team_name, do: "(My team)", else: "" %></em>
+          </td>
           <td><%= team.member_count %></td>
           <td><%= team.activity_count %></td>
           <td><%= team.total_distance %></td>
@@ -27,37 +57,10 @@
   </table>
 </section>
 
-<hr />
-
 <section>
   <%= if @current_user_id do %>
-    <%= if @current_user_id == @event.user_id do %>
-      <h2>Update event</h2>
-      <section>
-        <%= form_for @conn, Routes.event_path(@conn, :update, @event.id), fn f -> %>
-          <label>
-            Event name: <%= text_input f, :name, value: @event.name, required: true %>
-          </label>
-
-          <label>
-            Event code: <%= text_input f, :code, value: @event.code, required: true %>
-          </label>
-
-          <label>
-            Event start: <%= date_input f, :start_date, value: @event.start_date, required: true %>
-          </label>
-
-          <label>
-            Event end: <%= date_input f, :end_date, value: @event.end_date, required: true %>
-          </label>
-
-          <%= submit "Update" %>
-        <% end %>
-      </section>
-    <% end %>
-
     <section>
-      <h2>Join or switch team</h2>
+      <h4>Choose a team</h4>
       <%= form_for @conn, Routes.event_path(@conn, :join, id: @event.id), fn _f -> %>
         <input
           type="text"
@@ -72,9 +75,9 @@
             <option value="<%= team.name %>"><%= team.name %></option>
           <% end %>
         </datalist>
-        <%= submit gettext "%{label}", label: if @team_name == "", do: "Join", else: "Switch team" %>
+        <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
         <%= if @team_name != "" do %>
-          <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-outline" %>
+          <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-clear" %>
         <% end %>
       <% end %>
     </section>

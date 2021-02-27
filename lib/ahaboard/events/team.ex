@@ -27,8 +27,8 @@ defmodule Ahaboard.Events.Team do
     timestamps()
   end
 
-  def changeset(user_or_changeset, attrs) do
-    user_or_changeset
+  def changeset(team_or_changeset, attrs) do
+    team_or_changeset
     |> cast(attrs, [
       :name,
       :image,
@@ -36,5 +36,14 @@ defmodule Ahaboard.Events.Team do
       :event_id
     ])
     |> validate_required([:name, :event_id, :user_id])
+  end
+
+  def changeset_cache(team, attrs) do
+    team
+    |> cast(attrs, [
+      :member_count,
+      :activity_count,
+      :total_distance,
+    ])
   end
 end

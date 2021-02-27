@@ -27,8 +27,8 @@ defmodule Ahaboard.Events.Event do
     timestamps()
   end
 
-  def changeset(user_or_changeset, attrs) do
-    user_or_changeset
+  def changeset(event_or_changeset, attrs) do
+    event_or_changeset
     |> cast(attrs, [
       :name,
       :code,

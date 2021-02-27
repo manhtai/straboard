@@ -10,10 +10,10 @@ defmodule Ahaboard.Events do
 
   @spec joined_events(binary(), map) :: [Event.t()]
   def joined_events(user_id, _params) do
-    from(etv in EventTeamUser,
-      where: etv.user_id == ^user_id,
+    from(etu in EventTeamUser,
+      where: etu.user_id == ^user_id,
       inner_join: event in Event,
-      on: event.id == etv.event_id,
+      on: event.id == etu.event_id,
       order_by: [desc: event.inserted_at],
       select: event
     )
@@ -69,29 +69,6 @@ defmodule Ahaboard.Events do
     end
   end
 
-  @spec get_teams(Event.t()) :: nil | [Team.t()]
-  def get_teams(%Event{id: id} = _event) do
-    Team
-    |> where(event_id: ^id)
-    |> Repo.all()
-  end
-
-  @spec get_or_create_team_by_name!(Event.t(), binary(), String.t()) :: Team.t()
-  def get_or_create_team_by_name!(%Event{id: id} = _event, user_id, name) do
-    team = Team
-           |> where(event_id: ^id, name: ^name)
-           |> Repo.one()
-
-    case team do
-      nil ->
-        %Team{}
-        |> Team.changeset(%{name: name, event_id: id, user_id: user_id})
-        |> Repo.insert!()
-
-      _ -> team
-    end
-  end
-
   @spec join_event(Event.t(), Team.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
   def join_event(%Event{id: event_id} = event, %Team{id: team_id} = team, user_id) do
     attrs = %{
@@ -119,5 +96,29 @@ defmodule Ahaboard.Events do
     event
     |> get_event_user(user_id)
     |> Repo.delete()
+  end
+
+  def refresh_cache(%Event{id: id} = _event) do
+    stats =
+      from(etu in EventTeamUser,
+        group_by: etu.team_id,
+        select: {etu.team_id, count(etu.id)}
+      )
+      |> Repo.all()
+
+    stats = stats |> Enum.into(%{})
+
+    Team
+    |> where(event_id: ^id)
+    |> Repo.all()
+    |> Enum.each(fn (team) ->
+      team
+        |> Team.changeset_cache(%{
+          member_count: stats[team.id] || 0,
+          activity_count: 0,
+          total_distance: 0,
+        })
+        |> Repo.update()
+    end)
   end
 end
