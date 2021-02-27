@@ -66,14 +66,23 @@ defmodule AhaboardWeb.EventController do
 
   defp render_event(conn, event) do
     current_user_id = get_session(conn, :current_user_id)
+    teams = Events.get_teams(event)
+    team_name = case Events.get_event_user(event, current_user_id) do
+      nil -> ""
+      event_user ->
+        team = teams
+        |> Enum.filter(fn (team) -> team.id == event_user.team_id end)
+        |> Enum.at(0)
+        team.name
+    end
 
     render(
       conn,
       "show.html",
       event: event,
       current_user_id: current_user_id,
-      team_name: "",
-      teams: Events.get_teams(event)
+      team_name: team_name,
+      teams: teams,
     )
   end
 

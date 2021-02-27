@@ -92,20 +92,23 @@ defmodule Ahaboard.Events do
 
   @spec join_event(Event.t(), Team.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
   def join_event(%Event{id: event_id} = event, %Team{id: team_id} = team, user_id) do
+    attrs = %{
+      event_id: event_id,
+      user_id: user_id,
+      team_id: team_id,
+      event_role: (if event.user_id == user_id, do: "owner", else: "member"),
+      team_role: (if team.user_id == user_id, do: "owner", else: "member"),
+    }
     case get_event_user(event, user_id) do
       nil ->
         %EventTeamUser{}
-        |> EventTeamUser.changeset(%{
-          event_id: event_id,
-          user_id: user_id,
-          team_id: team_id,
-          event_role: (if event.user_id == user_id, do: "owner", else: "member"),
-          team_role: (if team.user_id == user_id, do: "owner", else: "member"),
-        })
+        |> EventTeamUser.changeset(attrs)
         |> Repo.insert()
 
       record ->
-        {:ok, record}
+        record
+        |> EventTeamUser.changeset(attrs)
+        |> Repo.update()
     end
   end
 
