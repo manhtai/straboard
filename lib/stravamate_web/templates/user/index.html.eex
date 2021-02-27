@@ -1,0 +1,21 @@
+<section class="phx-hero">
+  <img src="<%= @conn.assigns.current_user.image %>" />
+  <h1><%= @conn.assigns.current_user.first_name %> <%= @conn.assigns.current_user.last_name %></h1>
+</section>
+
+<section>
+  <p>
+    Strava profile:
+    <a href="https://www.strava.com/athletes/<%= @conn.assigns.current_user.uid %>">
+      https://www.strava.com/athletes/<%= @conn.assigns.current_user.uid %>
+    </a>
+  </p>
+  <p>
+    Member since: <%=Timex.format!(@conn.assigns.current_user.inserted_at, "{relative}", :relative) %>
+  </p>
+</section>
+
+<section>
+  <%= link "< My events", to: Routes.event_path(@conn, :index) %>
+  <%= link "Logout >", to: Routes.auth_path(@conn, :delete), method: "delete", class: "float-right" %>
+</section>

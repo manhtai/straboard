@@ -43,7 +43,24 @@ defmodule StravamateWeb.EventController do
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     event = Events.get_event!(id)
-    render_event(conn, event)
+    render_event_with_teams(conn, event, "show.html")
+  end
+
+  @spec page_create(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def page_create(conn, _params) do
+    render(conn, "create.html")
+  end
+
+  @spec page_update(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def page_update(conn, %{"id" => id}) do
+    event = Events.get_event!(id)
+    render(conn, "update.html", event: event)
+  end
+
+  @spec page_join(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def page_join(conn, %{"id" => id}) do
+    event = Events.get_event!(id)
+    render_event_with_teams(conn, event, "join.html")
   end
 
   @spec show_by_code(Plug.Conn.t(), map) :: Plug.Conn.t()
@@ -52,7 +69,7 @@ defmodule StravamateWeb.EventController do
 
     case event do
       nil -> redirect(conn, to: "/")
-      _ -> render_event(conn, event)
+      _ -> render_event_with_teams(conn, event, "show.html")
     end
   end
 
@@ -78,7 +95,7 @@ defmodule StravamateWeb.EventController do
     end
   end
 
-  defp render_event(conn, event) do
+  defp render_event_with_teams(conn, event, template) do
     Events.refresh_cache(event, false)
 
     current_user_id = get_session(conn, :current_user_id)
@@ -100,7 +117,7 @@ defmodule StravamateWeb.EventController do
 
     render(
       conn,
-      "show.html",
+      template,
       event: event,
       current_user_id: current_user_id,
       team_name: team_name,
@@ -109,7 +126,7 @@ defmodule StravamateWeb.EventController do
   end
 
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def update(conn, %{"id" => id, "event" => event_params}) do
+  def update(conn, %{"id" => id} = event_params) do
     with %User{id: user_id} <- conn.assigns.current_user do
       event = Events.get_event!(id, user_id)
 
@@ -117,12 +134,12 @@ defmodule StravamateWeb.EventController do
         {:ok, %Event{} = event} ->
           conn
           |> put_flash(:info, "Update event success!")
-          |> render_event(event)
+          |> redirect(to: "/events/" <> event.id)
 
         {:error, changeset} ->
           conn
           |> put_flash(:error, StringUtil.changeset_error_to_string(changeset))
-          |> render_event(event)
+          |> redirect(to: "/events/" <> event.id)
       end
     end
   end

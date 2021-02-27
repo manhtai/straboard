@@ -36,7 +36,17 @@ defmodule StravamateWeb.Router do
     post "/join_event", EventController, :join
     post "/leave_event", EventController, :leave
 
+    get "/create", EventController, :page_create
+    get "/:id/edit", EventController, :page_update
+    get "/:id/join", EventController, :page_join
+
     resources("/", EventController)
+  end
+
+  scope "/users", StravamateWeb do
+    pipe_through([:browser, :authentication_required])
+
+    resources("/", UserController)
   end
 
   scope "/", StravamateWeb do

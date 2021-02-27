@@ -1,40 +1,22 @@
 <section class="phx-hero">
-  <%= if @event do %>
-    <h1><%= @event.name %></h1>
+  <h1><%= @event.name %></h1>
+  <p>
+    From <em><%= @event.start_date %></em> to <em><%= @event.end_date %></em>
+  </p>
+
+  <%= if @current_user_id == @event.user_id do %>
+    <%= link "Edit event", to: Routes.event_path(@conn, :page_update, @event.id), class: "button button-outline" %>
+  <% end %>
+  <%= if @current_user_id do %>
+    <%= link (gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team")), to: Routes.event_path(@conn, :page_join, @event.id), class: "button button-outline" %>
   <% end %>
 </section>
-
-
-<%= if @current_user_id == @event.user_id do %>
-  <section>
-    <%= form_for @conn, Routes.event_path(@conn, :update, @event.id), fn f -> %>
-      <label>
-        Event name: <%= text_input f, :name, value: @event.name, required: true %>
-      </label>
-
-      <label>
-        Event code: <%= text_input f, :code, value: @event.code, required: true %>
-      </label>
-
-      <label>
-        Event start: <%= date_input f, :start_date, value: @event.start_date, required: true %>
-      </label>
-
-      <label>
-        Event end: <%= date_input f, :end_date, value: @event.end_date, required: true %>
-      </label>
-
-      <%= submit "Update" %>
-    <% end %>
-  </section>
-  <hr />
-<% end %>
-
 
 <section>
   <table>
     <thead>
       <tr>
+        <th>#</th>
         <th>Team</th>
         <th>No. of members</th>
         <th>No. of activities</th>
@@ -42,11 +24,12 @@
       </tr>
     </thead>
     <tbody>
-      <%= for team <- @teams do %>
+      <%= for {team, i} <- Enum.with_index(@teams) do %>
         <tr>
+          <td><%= i+1 %></td>
           <td>
             <%= team.name %>
-            <em><%= if team.name == @team_name, do: "(My team)", else: "" %></em>
+            <em><%= if team.name == @team_name, do: "(mine)", else: "" %></em>
           </td>
           <td><%= team.member_count %></td>
           <td><%= team.activity_count %></td>
@@ -60,34 +43,11 @@
 <section>
   <%= if @current_user_id do %>
     <section>
-      <h4>Choose a team</h4>
-      <%= form_for @conn, Routes.event_path(@conn, :join, id: @event.id), fn _f -> %>
-        <input
-          type="text"
-          name="team_name"
-          value="<%= @team_name %>"
-          placeholder="Choose or create new team..."
-          list="teams"
-          autocomplete="off"
-        />
-        <datalist id="teams">
-          <%= for team <- @teams do %>
-            <option value="<%= team.name %>"><%= team.name %></option>
-          <% end %>
-        </datalist>
-        <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
-        <%= if @team_name != "" do %>
-          <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-clear" %>
-        <% end %>
-      <% end %>
-    </section>
-
-    <section>
-        <%= link "< My events", to: Routes.event_path(@conn, :index) %>
+      <%= link "< My events", to: Routes.event_path(@conn, :index) %>
     </section>
   <% else %>
     <div class="float-clear">
-      <%= link "< Join this event", to: Routes.event_path(@conn, :show, @event.id) %>
+      <%= link "< Join this event", to: Routes.event_path(@conn, :page_join, @event.id) %>
     </div>
   <% end %>
 </section>

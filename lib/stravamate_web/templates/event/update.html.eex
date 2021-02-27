@@ -1,0 +1,29 @@
+<section class="phx-hero">
+  <h1>Update "<%= @event.name %>"</h1>
+</section>
+
+<section>
+  <%= form_for @conn, Routes.event_path(@conn, :update, @event.id), [method: :put], fn f -> %>
+    <label>
+      Event name: <%= text_input f, :name, value: @event.name, required: true %>
+    </label>
+
+    <label>
+      Event code: <%= text_input f, :code, value: @event.code, required: true %>
+    </label>
+
+    <label>
+      Event start: <%= date_input f, :start_date, value: @event.start_date, required: true %>
+    </label>
+
+    <label>
+      Event end: <%= date_input f, :end_date, value: @event.end_date, required: true %>
+    </label>
+
+    <%= submit "Update" %>
+  <% end %>
+</section>
+
+<section>
+  <%= link "< Back to event", to: Routes.event_path(@conn, :show, @event.id) %>
+</section>

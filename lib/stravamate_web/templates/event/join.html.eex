@@ -1,0 +1,31 @@
+<section class="phx-hero">
+  <h1>Join <%= @event.name %></h1>
+</section>
+
+<section>
+  <h2>Choose a team</h2>
+  <%= form_for @conn, Routes.event_path(@conn, :join, id: @event.id), fn _f -> %>
+    <input
+      type="text"
+      name="team_name"
+      value="<%= @team_name %>"
+      placeholder="Choose or create new team..."
+      list="teams"
+      autocomplete="off"
+    />
+    <datalist id="teams">
+      <%= for team <- @teams do %>
+        <option value="<%= team.name %>"><%= team.name %></option>
+      <% end %>
+    </datalist>
+    <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
+
+    <%= if @team_name != "" do %>
+      <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-clear" %>
+    <% end %>
+  <% end %>
+</section>
+
+<section>
+  <%= link "< Back to event", to: Routes.event_path(@conn, :show, @event.id) %>
+</section>
