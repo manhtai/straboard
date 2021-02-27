@@ -26,6 +26,9 @@
 
     <%= submit "Create" %>
   <% end %>
+</section>
 
+<section>
+  <hr />
   <%= link "< My events", to: Routes.event_path(@conn, :index) %>
 </section>

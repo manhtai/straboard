@@ -16,6 +16,7 @@
 </section>
 
 <section>
+  <hr />
   <%= link "< My events", to: Routes.event_path(@conn, :index) %>
   <%= link "Log out >", to: Routes.auth_path(@conn, :delete), method: "delete", class: "float-right" %>
 </section>

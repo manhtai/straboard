@@ -38,9 +38,12 @@
       <% end %>
     </tbody>
   </table>
+
+  <br />
 </section>
 
 <section>
+  <hr />
   <%= if @current_user_id do %>
     <section>
       <%= link "< My events", to: Routes.event_path(@conn, :index) %>

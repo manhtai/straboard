@@ -25,5 +25,6 @@
 </section>
 
 <section>
+  <hr />
   <%= link "< Back to event", to: Routes.event_path(@conn, :show, @event.id) %>
 </section>

@@ -24,6 +24,7 @@
 </section>
 
 <section>
+  <hr />
   <%= link "< Back to event", to: Routes.event_path(@conn, :show, @event.id) %>
   <%= if @team_name != "" do %>
     <%= link "Leave event >", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "float-right" %>

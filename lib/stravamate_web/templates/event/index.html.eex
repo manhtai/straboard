@@ -1,6 +1,6 @@
 <section class="phx-hero">
   <h1>My events</h1>
-  <%= link "Create new event", to: Routes.event_path(@conn, :page_create), class: "button button-outline" %>
+  <%= link "New event", to: Routes.event_path(@conn, :page_create), class: "button button-outline" %>
 </section>
 
 <section>
@@ -37,6 +37,7 @@
 
 
 <section>
+  <hr />
   <%= link "< My account", to: Routes.user_path(@conn, :index) %>
   <%= link "New event >", to: Routes.event_path(@conn, :page_create), class: "float-right" %>
 </section>
