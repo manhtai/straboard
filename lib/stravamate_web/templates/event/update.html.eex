@@ -1,5 +1,5 @@
 <section class="phx-hero">
-  <h1>Update "<%= @event.name %>"</h1>
+  <h1>Edit "<%= @event.name %>"</h1>
 </section>
 
 <section>

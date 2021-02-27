@@ -9,3 +9,8 @@
     Continue with Strava
   </a>
 </section>
+
+<section>
+  <%= link "< Report issues", to: "https://github.com/manhtai/stravamate/issues/new" %>
+  <%= link "Source code >", to: "https://github.com/manhtai/stravamate", class: "float-right" %>
+</section>

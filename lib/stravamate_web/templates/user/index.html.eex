@@ -17,5 +17,5 @@
 
 <section>
   <%= link "< My events", to: Routes.event_path(@conn, :index) %>
-  <%= link "Logout >", to: Routes.auth_path(@conn, :delete), method: "delete", class: "float-right" %>
+  <%= link "Log out >", to: Routes.auth_path(@conn, :delete), method: "delete", class: "float-right" %>
 </section>

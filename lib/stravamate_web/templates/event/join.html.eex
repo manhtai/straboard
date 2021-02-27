@@ -1,5 +1,5 @@
 <section class="phx-hero">
-  <h1>Join <%= @event.name %></h1>
+  <h1>Join "<%= @event.name %>"</h1>
 </section>
 
 <section>
@@ -20,12 +20,12 @@
     </datalist>
     <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
 
-    <%= if @team_name != "" do %>
-      <%= link "Leave event", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "button button-clear" %>
-    <% end %>
   <% end %>
 </section>
 
 <section>
   <%= link "< Back to event", to: Routes.event_path(@conn, :show, @event.id) %>
+  <%= if @team_name != "" do %>
+    <%= link "Leave event >", to: Routes.event_path(@conn, :leave, id: @event.id), method: "POST", class: "float-right" %>
+  <% end %>
 </section>

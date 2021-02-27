@@ -44,6 +44,7 @@
   <%= if @current_user_id do %>
     <section>
       <%= link "< My events", to: Routes.event_path(@conn, :index) %>
+      <%= link "Edit >", to: Routes.event_path(@conn, :page_update, @event.id), class: "float-right" %>
     </section>
   <% else %>
     <div class="float-clear">
