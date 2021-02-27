@@ -34,8 +34,7 @@ defmodule Ahaboard.Repo.Migrations.CreateEventTeamUsers do
           column: :id,
           type: :binary_id,
           on_delete: :delete_all
-        ),
-        null: false
+        )
       )
 
       add(:event_role, :string)

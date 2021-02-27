@@ -1,9 +1,12 @@
 defmodule Ahaboard.Events do
+  @moduledoc """
+  Events context
+  """
 
   import Ecto.Query
 
   alias Ahaboard.Repo
-  alias Ahaboard.Events.Event
+  alias Ahaboard.Events.{Event, EventTeamUser}
 
   @spec list_events(binary(), map) :: [Event.t()]
   def list_events(user_id, params) do
@@ -55,5 +58,36 @@ defmodule Ahaboard.Events do
     event
     |> Event.changeset(attrs)
     |> Repo.update()
+  end
+
+  @spec get_event_user(Event.t(), binary()) :: nil | EventTeamUser.t()
+  def get_event_user(%Event{id: id} = _event, user_id) do
+    EventTeamUser
+    |> where(event_id: ^id, user_id: ^user_id)
+    |> Repo.one()
+  end
+
+  @spec join_event(Event.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
+  def join_event(%Event{id: id} = event, user_id) do
+    case get_event_user(event, user_id) do
+      nil ->
+        %EventTeamUser{}
+        |> EventTeamUser.changeset(%{
+          event_id: id,
+          user_id: user_id,
+          event_role: (if event.user_id == user_id, do: "owner", else: "member")
+        })
+        |> Repo.insert()
+
+      record ->
+        {:ok, record}
+    end
+  end
+
+  @spec leave_event(Event.t(), binary()) :: {:ok, EventTeamUser.t()} | {:error, Ecto.Changeset.t()}
+  def leave_event(%Event{} = event, user_id) do
+    event
+    |> get_event_user(user_id)
+    |> Repo.delete()
   end
 end

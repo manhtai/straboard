@@ -43,6 +43,24 @@ defmodule AhaboardWeb.EventController do
     render(conn, "show.html", event: event)
   end
 
+  @spec join(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def join(conn, %{"id" => id}) do
+    with %User{id: user_id} <- conn.assigns.current_user do
+      event = Events.get_event!(id)
+      Events.join_event(event, user_id)
+      redirect(conn, to: "/events/" <> event.id)
+    end
+  end
+
+  @spec show_by_code(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def show_by_code(conn, %{"code" => code}) do
+    event = Events.get_event_by_code(code)
+    case event do
+      nil -> redirect(conn, to: "/")
+      _ -> render(conn, "show.html", event: event)
+    end
+  end
+
   @spec update(Plug.Conn.t(), map) :: Plug.Conn.t()
   def update(conn, %{"id" => id, "event" => event_params}) do
     with %User{id: user_id} <- conn.assigns.current_user do

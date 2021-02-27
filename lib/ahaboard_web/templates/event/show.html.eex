@@ -6,4 +6,5 @@
 
 <section>
     <%= link "< My events", to: Routes.event_path(@conn, :index), class: "button button-clear" %>
+    <%= link "Join this event", to: Routes.event_path(@conn, :join, id: @event.id), method: "POST", class: "button button-outline" %>
 </section>

@@ -33,12 +33,15 @@ defmodule AhaboardWeb.Router do
   scope "/events", AhaboardWeb do
     pipe_through([:browser, :authentication_required])
 
+    post "/join_event", EventController, :join
+
     resources("/", EventController)
   end
 
   scope "/", AhaboardWeb do
     pipe_through :browser
 
+    get "/:code", EventController, :show_by_code
     get "/", PageController, :index
   end
 
