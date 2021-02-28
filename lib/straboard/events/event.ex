@@ -33,13 +33,14 @@ defmodule Straboard.Events.Event do
     |> cast(attrs, [
       :name,
       :code,
+      :type,
       :image,
       :start_date,
       :end_date,
       :location,
       :user_id
     ])
-    |> validate_required([:name, :code, :user_id])
+    |> validate_required([:name, :code, :type, :start_date, :end_date, :user_id])
     |> unique_constraint(:code)
   end
 
