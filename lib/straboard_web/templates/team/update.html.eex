@@ -1,0 +1,20 @@
+<section class="phx-hero">
+  <h1>Edit team "<%= @team.name %>"</h1>
+</section>
+
+<section>
+  <%= form_for @conn, Routes.team_path(@conn, :update, @team.id), [method: :put], fn f -> %>
+    <label>
+      Team name: <%= text_input f, :name, value: @team.name, required: true %>
+    </label>
+
+    <div class="text-center">
+      <%= submit "Update" %>
+    </div>
+  <% end %>
+</section>
+
+<section>
+  <hr />
+  <%= link "< Back to event", to: Routes.event_path(@conn, :show, @team.event_id) %>
+</section>

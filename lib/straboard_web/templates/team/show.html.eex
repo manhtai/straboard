@@ -40,4 +40,7 @@
 <section>
   <hr />
   <%= link "< Back to event", to: Routes.event_path(@conn, :show, @team.event_id) %>
+  <%= if @current_user_id == @team.user_id do %>
+    <%= link "Edit team >", to: Routes.team_path(@conn, :edit, @team.id), class: "float-right" %>
+  <% end %>
 </section>

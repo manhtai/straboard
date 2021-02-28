@@ -39,6 +39,15 @@ defmodule Straboard.Events.Team do
     |> validate_required([:name, :event_id, :user_id])
   end
 
+  def changeset_update(team, attrs) do
+    team
+    |> cast(attrs, [
+      :name,
+      :image,
+    ])
+    |> validate_required([:name])
+  end
+
   def changeset_cache(team, attrs) do
     team
     |> cast(attrs, [

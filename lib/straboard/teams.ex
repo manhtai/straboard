@@ -27,6 +27,13 @@ defmodule Straboard.Teams do
     end
   end
 
+  @spec update_team(Team.t(), map()) :: {:ok, Team.t()} | {:error, Ecto.Changeset.t()}
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset_update(attrs)
+    |> Repo.update()
+  end
+
   @spec get_teams(Event.t()) :: nil | [Team.t()]
   def get_teams(%Event{id: id} = _event) do
     Team
