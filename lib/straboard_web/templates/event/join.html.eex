@@ -20,7 +20,7 @@
     </datalist>
 
     <div class="text-center">
-      <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join team", else: "Switch team"), class: "button button-outline" %>
+      <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
     </div>
   <% end %>
 </section>
