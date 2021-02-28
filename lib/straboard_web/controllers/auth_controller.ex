@@ -5,6 +5,7 @@ defmodule StraboardWeb.AuthController do
 
   alias Ueberauth.Strategy.Helpers
   alias Straboard.UserFromAuth
+  alias Straboard.StravaSync
 
   def request(conn, _params) do
     render(conn, "request.html", callback_url: Helpers.callback_url(conn))
@@ -26,6 +27,10 @@ defmodule StraboardWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case UserFromAuth.find_or_create(auth) do
       {:ok, user} ->
+        %{user_id: user.id}
+        |> StravaSync.new(queue: :default)
+        |> Oban.insert()
+
         conn
         |> put_flash(:info, "Successfully authenticated.")
         |> put_session(:current_user_id, user.id)

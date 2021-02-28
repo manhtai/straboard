@@ -10,15 +10,15 @@ defmodule Straboard.StravaHourlySync do
   alias Straboard.Events.EventTeamUser
   alias Straboard.StravaSync
 
-  @events_limit 1_000
+  # Current Strava ratelimit is 600 / 15 minutes
+  @user_limit 500
 
   @impl Oban.Worker
   def perform(_job) do
-    # Last 1_000 updated events only
     from(etu in EventTeamUser,
       order_by: [desc: etu.updated_at],
       distinct: etu.user_id,
-      limit: @events_limit,
+      limit: @user_limit,
       select: etu.user_id
     )
     |> Repo.all()

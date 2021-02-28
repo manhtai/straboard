@@ -58,7 +58,7 @@ config :straboard, Oban,
     Oban.Plugins.Pruner,
     {Oban.Plugins.Cron,
      crontab: [
-       {"0 * * * *", Straboard.StravaHourlySync}
+       {"*/15 * * * *", Straboard.StravaHourlySync}
        # {"0 0 * * *", Straboard.StravaDailySync},
      ]}
   ],
