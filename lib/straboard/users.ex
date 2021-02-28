@@ -13,11 +13,11 @@ defmodule Straboard.Users do
   end
 
   def update_token(user, token) do
-    %{
-      "access_token" => access_token,
-      "refresh_token" => refresh_token,
-      "expires_at" => expires_at,
-      "token_type" => token_type
+    %OAuth2.AccessToken{
+      access_token: access_token,
+      refresh_token: refresh_token,
+      expires_at: expires_at,
+      token_type: token_type
     } = token
 
     user
