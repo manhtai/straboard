@@ -49,7 +49,7 @@ defmodule Straboard.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:timex, "~> 3.6"},
       # Strava SDK
-      {:strava, git: "git@github.com:manhtai/strava.git"},
+      {:strava, git: "https://github.com/manhtai/strava.git"},
       # Lint
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       # Auth
