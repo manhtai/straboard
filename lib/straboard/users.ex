@@ -13,12 +13,19 @@ defmodule Straboard.Users do
   end
 
   def update_token(user, token) do
+    %{
+      "access_token" => access_token,
+      "refresh_token" => refresh_token,
+      "expires_at" => expires_at,
+      "token_type" => token_type
+    } = token
+
     user
     |> User.refresh_token_changeset(%{
-      token: token.access_token,
-      refresh_token: token.refresh_token,
-      token_expires_at: token.expires_at,
-      token_type: token.token_type
+      token: access_token,
+      refresh_token: refresh_token,
+      token_expires_at: expires_at,
+      token_type: token_type
     })
     |> Repo.update()
   end

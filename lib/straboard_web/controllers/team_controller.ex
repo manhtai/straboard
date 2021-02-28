@@ -1,11 +1,7 @@
 defmodule StraboardWeb.TeamController do
   use StraboardWeb, :controller
 
-  alias Straboard.Users.User
-  alias Straboard.Events
   alias Straboard.Teams
-  alias Straboard.Events.Event
-  alias Straboard.StringUtil
 
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do

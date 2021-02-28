@@ -43,7 +43,8 @@ defmodule Straboard.Teams do
 
   def get_team_members(id) do
     from(etu in EventTeamUser,
-      left_join: u in User, on: etu.user_id == u.id,
+      left_join: u in User,
+      on: etu.user_id == u.id,
       where: etu.team_id == ^id,
       select: u
     )

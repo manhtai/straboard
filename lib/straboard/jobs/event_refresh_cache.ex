@@ -3,6 +3,9 @@ defmodule Straboard.EventRefreshCache do
   Refresh event leaderboard job
   """
 
+  alias Straboard.Events
+  require Logger
+
   use Oban.Worker,
     queue: :default,
     priority: 3,
@@ -13,6 +16,7 @@ defmodule Straboard.EventRefreshCache do
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"event_id" => event_id} = _args}) do
     Events.calculate_team_stats(event_id)
+    Logger.debug("Refresh cache success for event #{event_id}")
     :ok
   end
 end

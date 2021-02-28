@@ -15,14 +15,29 @@ defmodule Straboard.StravaSync do
     unique: [fields: [:args], keys: [:user_id], period: 30]
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: %{"user_id" => user_id} = _args}) do
+  def perform(%Oban.Job{args: %{"user_id" => user_id} = _args}, log_error \\ false) do
     user = Users.get_by_id!(user_id)
 
     client =
       Strava.Client.new(user.token,
         refresh_token: user.refresh_token,
         token_refreshed: fn client ->
-          Users.update_token(user, client.token)
+          # FIXME: "strava" package failed to parse access_token, so I have to parse it myself
+          case client.token do
+            %OAuth2.AccessToken{access_token: access_token} ->
+              case Jason.decode(access_token) do
+                {:ok, token} ->
+                  Users.update_token(user, token)
+                  Logger.info("Perform sync again for user #{user_id}")
+                  perform(%Oban.Job{args: %{"user_id" => user_id}}, true)
+
+                _ ->
+                  :ignore
+              end
+
+            _ ->
+              :ignore
+          end
         end
       )
 
@@ -40,11 +55,14 @@ defmodule Straboard.StravaSync do
 
           Activities.update_or_create(attrs)
         end)
+        Logger.debug("Sync activities success for user #{user_id}")
 
         :ok
 
       {:error, error} = result ->
-        Logger.error(error)
+        if log_error do
+          Logger.error(error)
+        end
         result
     end
   end
