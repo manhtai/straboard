@@ -18,8 +18,10 @@
         <option value="<%= team.name %>"><%= team.name %></option>
       <% end %>
     </datalist>
-    <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join", else: "Switch team"), class: "button button-outline" %>
 
+    <div class="text-center">
+      <%= submit gettext "%{label}", label: (if @team_name == "", do: "Join team", else: "Switch team"), class: "button button-outline" %>
+    </div>
   <% end %>
 </section>
 

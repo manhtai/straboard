@@ -23,6 +23,7 @@ defmodule Straboard.Events.Team do
     field(:member_count, :integer, default: 0)
     field(:activity_count, :integer, default: 0)
     field(:total_distance, :float, default: 0.0)
+    field(:average_speed, :float, default: 0.0)
 
     timestamps()
   end
@@ -43,6 +44,7 @@ defmodule Straboard.Events.Team do
     |> cast(attrs, [
       :member_count,
       :activity_count,
+      :average_speed,
       :total_distance
     ])
   end

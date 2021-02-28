@@ -24,7 +24,9 @@
       Event end: <%= date_input f, :end_date, required: true %>
     </label>
 
-    <%= submit "Create" %>
+    <div class="text-center">
+      <%= submit "Create" %>
+    </div>
   <% end %>
 </section>
 

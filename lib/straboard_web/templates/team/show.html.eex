@@ -1,0 +1,43 @@
+<section class="phx-hero">
+  <h1>Team "<%= @team.name %>"</h1>
+</section>
+
+<section>
+  <table class="text-center">
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for {member, i} <- Enum.with_index(@members) do %>
+        <tr>
+          <td class="<%= if member.id == @current_user_id, do: "hightlight" %>">
+            <%= i+1 %>
+          </td>
+          <td>
+            <img src="<%= member.image %>" style="width: 32px; height: 32px;" />
+          </td>
+          <td>
+            <strong><%= member.first_name %> <%= member.last_name %></strong><br />
+          </td>
+          <td>
+            <a href="https://www.strava.com/athletes/<%= member.uid %>" target="_blank">
+              Strava
+            </a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <br />
+</section>
+
+<section>
+  <hr />
+  <%= link "< Back to event", to: Routes.event_path(@conn, :show, @team.event_id) %>
+</section>

@@ -11,6 +11,7 @@ defmodule Straboard.Repo.Migrations.CreateTeams do
       add(:member_count, :integer, default: 0)
       add(:activity_count, :integer, default: 0)
       add(:total_distance, :float, default: 0.0)
+      add(:average_speed, :float, default: 0.0)
 
       add(
         :user_id,

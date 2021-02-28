@@ -1,6 +1,5 @@
 <section class="phx-hero">
   <h1>My events</h1>
-  <%= link "New event", to: Routes.event_path(@conn, :page_create), class: "button button-outline" %>
 </section>
 
 <section>
@@ -11,7 +10,9 @@
         <a href="<%= Routes.event_path @conn, :show, event %>">
           <%= event.name %>
         </a> created <%= Timex.format!(event.inserted_at, "{relative}", :relative) %>
-        <%= link "Share link >", to: Routes.event_path(@conn, :show_by_code, event.code), class: "float-right" %>
+        <a href="<%= Routes.event_path(@conn, :show_by_code, event.code) %>" class="float-right" target="_blank">
+          Public link
+        </a>
       </li>
     <% end %>
     <%= if @created_events == [] do %>
@@ -26,7 +27,9 @@
         <a href="<%= Routes.event_path @conn, :show, event %>">
           <%= event.name %>
         </a> created <%= Timex.format!(event.inserted_at, "{relative}", :relative) %>
-        <%= link "Share link >", to: Routes.event_path(@conn, :show_by_code, event.code), class: "float-right" %>
+        <a href="<%= Routes.event_path(@conn, :show_by_code, event.code) %>" class="float-right" target="_blank">
+          Public link
+        </a>
       </li>
     <% end %>
     <%= if @joined_events == [] do %>
@@ -35,9 +38,11 @@
   </ul>
 </section>
 
+<section class="text-center">
+  <%= link "New event", to: Routes.event_path(@conn, :page_create), class: "button button-outline" %>
+</section>
 
 <section>
   <hr />
   <%= link "< My account", to: Routes.user_path(@conn, :index) %>
-  <%= link "New event >", to: Routes.event_path(@conn, :page_create), class: "float-right" %>
 </section>

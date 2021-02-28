@@ -7,6 +7,8 @@ defmodule Straboard.Events do
 
   alias Straboard.Repo
   alias Straboard.Events.{Event, Team, EventTeamUser}
+  alias Straboard.Teams
+  alias Straboard.Users.Activity
 
   @spec joined_events(binary(), map) :: [Event.t()]
   def joined_events(user_id, _params) do
@@ -111,7 +113,63 @@ defmodule Straboard.Events do
         |> Oban.insert()
 
       true ->
-        Straboard.EventRefreshCache.perform(%Oban.Job{args: %{"event_id" => id}})
+        calculate_team_stats(id)
     end
+  end
+
+  def calculate_team_stats(event_id) do
+    get_team_stats(event_id)
+    |> cache_team_stats()
+  end
+
+  def get_team_stats(event_id) do
+    from(t in Team,
+      left_join: etu in EventTeamUser,
+      on: t.id == etu.team_id,
+      left_join: e in Event,
+      on: t.event_id == e.id,
+      left_join: a in Activity,
+      on:
+        etu.user_id == a.user_id and
+          a.start_date_local >= e.start_date and
+          a.start_date_local <= e.end_date and
+          a.type == e.type,
+      where: t.event_id == ^event_id,
+      group_by: t.id,
+      select: %{
+        id: t.id,
+        total_distance: sum(a.distance),
+        average_speed: sum(a.distance) / sum(a.moving_time),
+        activity_count: count(a.id),
+        member_count: count(etu.user_id, :distinct)
+      }
+    )
+    |> Repo.all()
+  end
+
+  def cache_team_stats(stats_list) do
+    stats_list
+    |> Enum.each(fn attrs ->
+      attrs = %{
+        id: attrs.id,
+        total_distance: attrs.total_distance || 0.0,
+        average_speed: attrs.average_speed || 0.0,
+        activity_count: attrs.activity_count || 0,
+        member_count: attrs.member_count || 0
+      }
+
+      team = Teams.get_team!(attrs.id)
+
+      case attrs.member_count do
+        0 ->
+          team
+          |> Repo.delete!()
+
+        _ ->
+          team
+          |> Team.changeset_cache(attrs)
+          |> Repo.update()
+      end
+    end)
   end
 end

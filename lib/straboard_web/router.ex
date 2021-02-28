@@ -37,7 +37,7 @@ defmodule StraboardWeb.Router do
     post "/leave_event", EventController, :leave
 
     get "/create", EventController, :page_create
-    get "/:id/edit", EventController, :page_update
+    get "/:id/update", EventController, :page_update
     get "/:id/join", EventController, :page_join
 
     resources("/", EventController)
@@ -47,6 +47,12 @@ defmodule StraboardWeb.Router do
     pipe_through([:browser, :authentication_required])
 
     resources("/", UserController)
+  end
+
+  scope "/teams", StraboardWeb do
+    pipe_through([:browser, :authentication_required])
+
+    resources("/", TeamController)
   end
 
   scope "/", StraboardWeb do

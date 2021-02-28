@@ -2,7 +2,7 @@
   <h1>Welcome to Straboard!</h1>
 
   <p>
-    Create your own Strava custom team leaderboards
+    Create your own Strava team leaderboards
   </p>
 
   <a class="button" href="<%= Routes.auth_path(@conn, :request, "strava") %>">

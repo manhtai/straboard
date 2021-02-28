@@ -5,6 +5,8 @@ defmodule Straboard.StravaSync do
   alias Straboard.Users
   alias Straboard.Activities
 
+  require Logger
+
   use Oban.Worker,
     queue: :default,
     priority: 3,
@@ -41,8 +43,9 @@ defmodule Straboard.StravaSync do
 
         :ok
 
-      _ ->
-        :error
+      {:error, error} = result ->
+        Logger.error(error)
+        result
     end
   end
 end

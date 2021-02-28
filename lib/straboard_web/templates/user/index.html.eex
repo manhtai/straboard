@@ -6,7 +6,7 @@
 <section>
   <p>
     Strava profile:
-    <a href="https://www.strava.com/athletes/<%= @conn.assigns.current_user.uid %>">
+    <a href="https://www.strava.com/athletes/<%= @conn.assigns.current_user.uid %>" target="_blank">
       https://www.strava.com/athletes/<%= @conn.assigns.current_user.uid %>
     </a>
   </p>
