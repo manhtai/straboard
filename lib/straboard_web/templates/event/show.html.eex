@@ -52,17 +52,20 @@
 </section>
 
 <section class="text-center">
-  <%= if @current_user_id != nil and @team_name == "" do %>
+  <%= if @team_name == "" do %>
     <%= link "Join this event", to: Routes.event_path(@conn, :page_join, @event.id), class: "button" %>
   <% end %>
 </section>
 
 <section>
-  <hr />
   <%= if @current_user_id != nil do %>
+    <hr />
     <section>
       <%= link "< My events", to: Routes.event_path(@conn, :index) %>
-      <%= link (gettext "%{label}", label: (if @team_name == "", do: "Join this event >", else: "Switch team >")), to: Routes.event_path(@conn, :page_join, @event.id), class: "float-right" %>
+
+      <%= if @team_name != "" do %>
+        <%= link "Switch team >", to: Routes.event_path(@conn, :page_join, @event.id), class: "float-right" %>
+      <% end %>
 
       <%= if @current_user_id == @event.user_id do %>
         <div class="clearfix">
@@ -71,7 +74,5 @@
       <% end %>
 
     </section>
-  <% else %>
-    <%= link "< Join this event", to: Routes.event_path(@conn, :page_join, @event.id) %>
   <% end %>
 </section>
