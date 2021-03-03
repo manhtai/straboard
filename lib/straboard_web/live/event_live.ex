@@ -1,8 +1,6 @@
 defmodule StraboardWeb.EventLive do
   use StraboardWeb, :live_view
 
-  require Logger
-
   alias Straboard.Events
   alias Straboard.Teams
 
