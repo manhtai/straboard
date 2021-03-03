@@ -6,47 +6,7 @@
 </section>
 
 <section>
-  <table class="text-center">
-    <thead>
-      <tr>
-        <th>Rank</th>
-        <th>Team</th>
-        <th>Distance ▾</th>
-        <th>Activities</th>
-        <th>Avg. speed</th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= for {team, i} <- Enum.with_index(@teams) do %>
-        <tr>
-          <td class="<%= if team.name == @team_name, do: "hightlight" %>">
-            <%= i+1 %>
-          </td>
-          <td>
-            <strong><%= team.name %></strong><br />
-            <a href="<%= Routes.team_path(@conn, :show, team.id) %>">
-              <%= team.member_count %> member<%= if team.member_count >= 2, do: "s" %>
-            </a>
-          </td>
-          <td><%= (team.total_distance / 1_000) |> Float.round(1) %> km</td>
-          <td><%= team.activity_count %></td>
-          <td>
-            <%= if team.average_speed > 0 do %>
-              <%= if @event.type == "Run" do %>
-                <%= 1_000_000 / team.average_speed
-                    |> trunc()
-                    |> Timex.Duration.from_milliseconds()
-                    |> Timex.Duration.to_time!()
-                    |> Timex.Format.DateTime.Formatter.format!("%M:%S", :strftime) %> /km
-              <% else %>
-                <%= team.average_speed |> Float.round(1) %> m/s<br />
-              <% end %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%= live_render(@conn, StraboardWeb.EventLive, session: %{"current_user_id" => @current_user_id, "id" => @event.id}) %>
 
   <br />
 </section>

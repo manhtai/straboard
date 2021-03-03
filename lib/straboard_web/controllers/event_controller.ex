@@ -40,12 +40,6 @@ defmodule StraboardWeb.EventController do
     end
   end
 
-  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def show(conn, %{"id" => id}) do
-    event = Events.get_event!(id)
-    render_event_with_teams(conn, event, "show.html")
-  end
-
   @spec page_create(Plug.Conn.t(), map) :: Plug.Conn.t()
   def page_create(conn, _params) do
     render(conn, "create.html")
@@ -61,6 +55,12 @@ defmodule StraboardWeb.EventController do
   def page_join(conn, %{"id" => id}) do
     event = Events.get_event!(id)
     render_event_with_teams(conn, event, "join.html")
+  end
+
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def show(conn, %{"id" => id}) do
+    event = Events.get_event!(id)
+    render_event_with_teams(conn, event, "show.html")
   end
 
   @spec show_by_code(Plug.Conn.t(), map) :: Plug.Conn.t()
