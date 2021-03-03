@@ -39,7 +39,7 @@ defmodule StraboardWeb.EventLive do
   @impl true
   def handle_info(:update, socket) do
     Process.send_after(self(), :update, 30_000)
-    Events.refresh_cache(event, false)
+    Events.refresh_cache(socket.assigns.event, false)
 
     teams = Teams.get_teams(socket.assigns.event)
     {:noreply, assign(socket, teams: teams)}
